@@ -1,0 +1,622 @@
+// import 'package:flutter/material.dart';
+// import 'dart:math';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'dart:async';
+// import 'package:provider/provider.dart';
+
+// void main() => runApp(MyApp());
+
+//=============================
+//           STATES
+//=============================
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: MyFirstWidget(),
+//       ),
+//     );
+//   }
+// }
+
+
+// class MyFirstWidget extends StatefulWidget {
+//   // final Color color;
+
+//   // MyFirstWidget({this.color = Colors.red});
+
+//   @override
+//   _MyFirstWidgetState createState() => _MyFirstWidgetState(); //UI is not defined in class in Stateful widget but you may use this syntax
+// }
+
+// class _MyFirstWidgetState extends State<MyFirstWidget> { 
+//   int count = 0;
+//    //Lifecycle methods are only used in stateful widgets as well as states but state management can be done differently with 3rd party libraries
+//   @override
+//   void initState() {
+//     //Works like useEffect or ComponentDidMount
+//     super.initState();
+//   }
+
+  
+//   static void printSomething() => {
+//       print('hello')
+//   };
+
+//   @override
+//   void dispose() {
+//     // May be used to end user connection to the database
+//     // Runs after widget is removed from widget tree
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: TextButton(
+//         child: Text('$count'),
+//         onPressed: () => {
+//           printSomething(),
+//           setState(() => {
+//             count++
+//              }) //Similar to react setState
+//         },
+//       ),
+//     );
+//   }
+// }
+
+//Stateless widgets are immutable so properties will never change while stateful is the opposite
+
+//=============================
+//      Platform Checking
+//=============================
+
+// import 'dart:io' show Platform;
+//  return MaterialApp(
+//    home: Scaffold(
+//      body: Center(
+//        child: Platform.isAndroid //Allows to optimise certain elements for different devices
+//            ? Switch(value: true, onChanged: (v) => null)
+//            : CupertinoSwitch(value: true, onChanged: (v) => null),
+//      ),
+//    ),
+//  );
+
+//===========================
+//  MaterialApp + Scaffold
+//===========================
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp( //Does nothing with UI but sets the context for the rest of the app (mainly used to set your navigation between pages)
+//       home: Scaffold(
+//         //Blank canvas so to speak or pages and more than one scaffold can be used to create 'pages' to navigate through
+//         appBar: AppBar(
+//           title: Text('My Cool App'),
+//         ),
+//         body: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Center(
+//             child: Icon(
+//               Icons.album,
+//               size: 50,
+//             ),
+//         ),
+//         ),
+        
+//         floatingActionButton: FloatingActionButton(child: Icon(Icons.smoking_rooms, size: 30) ,onPressed: () {}),
+//         drawer: Drawer(
+//           // Add a ListView to the drawer. This ensures the user can scroll
+//           // through the options in the drawer if there isn't enough vertical
+//           // space to fit everything.
+//           child: ListView(
+//             // Important: Remove any padding from the ListView.
+//             padding: EdgeInsets.zero,
+//             children: [
+//               const DrawerHeader(
+//                 decoration: BoxDecoration(
+//                   color: Colors.blue,
+//                 ),
+//                 child: Text('Drawer Header'),
+//               ),
+//               ListTile(
+//                 title: const Text('Item 1'),
+//                 onTap: () {
+//                   // Update the state of the app.
+//                   // ...
+//                 },
+//               ),
+//               ListTile(
+//                 title: const Text('Item 2'),
+//                 onTap: () {
+//                   // Update the state of the app.
+//                   // ...
+//                 },
+//               ),
+//             ],
+//           ),
+//         ),
+//         bottomNavigationBar: BottomNavigationBar(items: [
+//           BottomNavigationBarItem(label: 'foo', icon: Icon(Icons.call), tooltip: 'Call someone'),
+//           BottomNavigationBarItem(label: 'bar', icon: Icon(Icons.cached))
+//         ]),
+//       )
+//     );
+//   }
+// }
+
+//==========================
+//        Navigation
+//==========================
+
+// class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+
+    
+//      routes: {
+//        '/home': (context) => HomeScreen(),
+//        '/slideshow': (context) => SlideshowScreen()
+//      },
+
+//      home: HomeScreen(color: Colors.blue),
+//    );
+//  }
+// }
+
+// class HomeScreen extends StatelessWidget {
+
+//  final Color color;
+
+//  HomeScreen({this.color = Colors.red});
+ 
+//  @override
+//  Widget build(BuildContext context) {
+//    return Scaffold(
+//      appBar: AppBar(title: Text('Home'), backgroundColor: this.color),
+//      body: Center(
+//        child: Row(
+//          mainAxisAlignment: MainAxisAlignment.center,
+//          children: <Widget>[
+//            TextButton(child: Text('push'), onPressed: () {
+
+//              // Navigator.push(
+//              //   context,
+//              //   MaterialPageRoute(builder: (context) => SlideshowScreen(name: 'Jeff'))
+//              // ); // Routing w/ Builder function
+
+
+//            //  Navigator.pushNamed( // Named Routing 
+//            //     context,
+//            //     '/slideshow'
+//            //   );
+
+//              Navigator.popAndPushNamed( // Pops off all screens and sends user to desired page
+//                context,
+//                '/slideshow'
+//              );
+
+//            },
+//            ),
+
+//          ],
+//        ),
+//      ),
+//    );
+//  }
+// }
+
+// class SlideshowScreen extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return Scaffold(
+//      appBar: AppBar(title: Text('Slideshow'), backgroundColor: Colors.red,),
+//      body: Center(
+//        child: Row(
+//          mainAxisAlignment: MainAxisAlignment.center,
+//          children: <Widget>[
+//            TextButton(child: Text('push'), onPressed: () {
+
+//              // Navigator.push(
+//              //   context,
+//              //   MaterialPageRoute(builder: (context) => SlideshowScreen(name: 'Jeff'))
+//              // ); // Routing w/ Builder function
+
+
+//            //  Navigator.pushNamed( // Named Routing 
+//            //     context,
+//            //     '/slideshow'
+//            //   );
+
+//              Navigator.popAndPushNamed( // Pops off all screens and sends user to desired page
+//                context,
+//                '/home'
+//              );
+
+//            },),
+
+//          ],
+//        ),
+//      ),
+//    );
+//  }
+// }
+
+//=======================
+//     BOX DECORATION
+//=======================
+
+// class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      home: Scaffold(
+//        body: Center(
+//          child: Container(
+//            alignment: Alignment.center,
+//            decoration: BoxDecoration(
+//              color: Colors.blue,
+//              border: Border.all(width: 5),
+//              boxShadow: [
+//                BoxShadow(offset: Offset(40, 40), color: Colors.pink),
+//                BoxShadow(offset: Offset(20, 20), color: Colors.yellow),
+//              ],
+//              gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight,colors: [Colors.yellow, Colors.pink])
+//            ),
+//            child: Center(
+//              child: Text(
+//                'Hello World', 
+//                style: TextStyle(
+//                fontSize: 50,
+//                fontFamily: 'hanson',
+//                fontWeight: FontWeight.bold
+//              ),
+//             // style: Theme.of(context).textTheme.headline5, //To use styles in multiple places
+//              ),
+//            ),
+//          )
+//        ),
+//      ),
+//    );
+//  }
+// }
+
+//========================
+//    GESTURE DETECTOR
+//========================
+
+// class MyApp extends StatelessWidget {
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: Center(
+//            child: Material(
+//             //  child: GestureDetector( //Can be used to detect different gestures and based on the touch it will run a specific function(Custom button in effect)
+//             //    onTapDown: (details) => print('Hey'),
+//             //    child: Container(
+//             //      width: 100,
+//             //      height: 100,
+//             //      color: Colors.blue,
+//             //    ) ,
+//             // ),
+//             color: Colors.blue[100], //Only used with material in this case
+//             child: InkWell( //Can be used to detect different gestures and based on the touch it will run a specific function(Custom button in effect) with animation
+//               onDoubleTap: () => print('It doubles'),
+//               onTap: () => print('I\'m a single'),
+//               child: Container(
+//                 width: 100,
+//                 height: 100,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+//=======================
+//    FLEX LAYOUT
+//=======================
+
+//Allows for things to be organised in a row and column structure
+//Unfortunately doesn't allow you to position widgets freely
+
+// class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      home: Scaffold(
+//        body: Container(
+//          color: Colors.blue,
+//          padding: EdgeInsets.all(16),
+//          child: Column(
+//            mainAxisAlignment: MainAxisAlignment.center, //Similar to Justify content in flex box
+//            crossAxisAlignment: CrossAxisAlignment.stretch, //Similar to Align Items (These two can change dependant on whether the rapper is a row or column)
+//            children: <Widget>[
+//              Icon(Icons.cake, color: Colors.white, size: 50,),
+//              Icon(Icons.cake, color: Colors.white, size: 100,),
+//              Icon(Icons.cake, color: Colors.white, size: 200,),
+//            ],
+//          )
+//        )
+//      ),
+//    );
+//  }
+// }
+
+//========================
+//       STACK
+//========================
+
+//Stacks can be used for stacking animated widgets on another background or to place different widgets wherever needed
+
+// class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      home: Scaffold(
+//        body: SizedBox.expand( //Allows stack to cover the entire screen
+//          child: Stack( //Stacks the array widgets on top of each other if no positioning applied
+//            children: <Widget>[
+//              Icon( //Without any positioning the object stays in the top left of the screen
+//                Icons.camera,
+//                size: 100,
+//                color: Colors.red,
+//              ),
+//              Align(// Uses the alignment to have this set for you
+//                  alignment: Alignment.center,
+//                  child: Icon(
+//                    Icons.camera,
+//                    size: 100,
+//                    color: Colors.blue,
+//                  )),
+//              Positioned( //Allows to explicitly set the position absolute to the other widgets
+//                  bottom: 20,
+//                  left: 100,
+//                  child: Icon(
+//                    Icons.camera,
+//                    size: 100,
+//                    color: Colors.green,
+//                  ))
+//            ],
+//          ),
+//        ),
+//      ),
+//    );
+//  }
+// }
+
+//==========================
+//       SCROLLING 
+//==========================
+
+// class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      home: Scaffold(
+//        body: ListView(
+//          scrollDirection: Axis.vertical, //scroll direction
+//          children: _cards(),
+//        )
+//      ),
+//    );
+//  }
+
+//  /*
+//  TO-DO: 
+//  1. Look up Listview.Builder to load things only when scrolling down rather than before with some conditional logic
+//  2. Look up Scroll Controller
+//  3. Look up GridView as well
+//  */
+
+//  List<Widget> _cards() {
+//    return [1,2,3,4,5,6,7,8,9].map((v) => Container(
+//        color: Colors.blue,
+//        margin: EdgeInsets.all(20),
+//        height: 100,
+//        child: Text('$v'),
+//      )
+//    ).toList();
+//  }
+// }
+
+//=======================
+//   Animation Widgets
+//=======================
+
+
+// class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      home: Scaffold(
+//        body: Center(
+//          child: CoolBox(),
+//        )
+//      ),
+//    );
+//  }
+
+// }
+
+// class CoolBox extends StatefulWidget {
+
+//  @override
+//  _CoolBoxState createState() => _CoolBoxState();
+// }
+
+// class _CoolBoxState extends State<CoolBox> {
+
+//  double width = 100;
+//  double height = 100;
+//  Color color = Colors.green;
+
+//  @override
+//  Widget build(BuildContext context) {
+//    return AnimatedContainer( //Wrapper that allows you to animate a widget on re-render the widget is auto animated
+//      duration: Duration(seconds: 1), //Length of the animation
+//      curve: Curves.elasticInOut, //'Flavour' of the animation
+//      color: color,
+//      width: width,
+//      height: height,
+//      child: TextButton(
+//        child: Text('Random'),
+//        onPressed: () {
+
+//          setState(() {
+//            width = Random().nextDouble() * 400;
+//            height = Random().nextDouble() * 400;
+
+//            int r = Random().nextInt(255);
+//            int b = Random().nextInt(255);
+//            int g = Random().nextInt(255);
+//            color = Color.fromRGBO(r, b, g, 1);
+//          });
+
+        
+//        },
+//      )
+//    );
+//  }
+
+//  }
+
+//======================
+//     THEMES
+//======================
+
+
+
+// class MyApp extends StatelessWidget {
+
+
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+
+//      theme: ThemeData(
+//        brightness: Brightness.light,
+//        primaryColor: Colors.lightGreen,
+//        textTheme: TextTheme(
+//          bodyText1: TextStyle(color: Colors.red, fontSize: 30),
+//          headline1: TextStyle(color: Colors.blue, fontSize: 70),
+//        )
+//      ),
+
+//      home: HomeScreen(),
+//    );
+//  }
+// }
+
+// class HomeScreen extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return Scaffold(
+//      appBar: AppBar(),
+//      body: Center(
+//        child: Text('Hello World', style: Theme.of(context).textTheme.headline1,),
+//      )
+//    );
+//  }
+// }
+
+//===========================
+//    STREAMS AND FUTURES
+//===========================
+
+// class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      home: HomeScreen(),
+//    );
+//  }
+// }
+
+// class HomeScreen extends StatelessWidget {
+
+//  final Firestore db = Firestore.instance;
+
+//  @override
+//  Widget build(BuildContext context) {
+//    return Scaffold(
+//      appBar: AppBar(title: Text('Home')),
+//      body: Center(
+//        child: StreamBuilder<DocumentSnapshot>(//Allows flutter to handle the stream automatically and unmount it appropriately
+//          stream: db.collection('users').document('091Y9vDbKnkK7zNcb8BU').snapshots(),
+//          builder: (context, snapshot) {
+          
+//            if (snapshot.hasData) {
+
+//              var data = snapshot.data?.data;
+
+//              return Column(
+//                crossAxisAlignment: CrossAxisAlignment.center,
+//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                children: <Widget>[
+
+//                  Image.network(data?['photoURL']),
+//                  Text(data?['username'], style: Theme.of(context).textTheme.headline4,),
+
+
+//                ],
+//              );
+//            } else {
+//              return Container();
+//            }
+
+          
+//          }
+//        ),
+//      )
+//    );
+//  }
+// }
+
+//============================
+//      STATE MANAGEMENT
+//============================
+
+// //Provider allows us to share data across multiple widgets using the Stream Provider
+// class UserModel {
+//  String name = 'Bob';
+// }
+
+// var stream = Stream.fromIterable([UserModel()]);//We set the stream here as that's what we receive from the database
+
+// class MyApp extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return StreamProvider<UserModel>.value(//To provide globally across the app, we wrap the provider around the MaterialApp
+//      value: stream,
+//      child: MaterialApp(
+//        home: HomeScreen(),
+//      ),
+//    );
+//  }
+// }
+
+// class HomeScreen extends StatelessWidget {
+//  final Firestore db = Firestore.instance;
+
+//  @override
+//  Widget build(BuildContext context) {
+
+//    var user = Provider.of<UserModel>(context);
+
+//    return Scaffold(
+//      body: Center(
+//        child: Text(user.name),
+//      ),
+//    );
+//  }
+// }

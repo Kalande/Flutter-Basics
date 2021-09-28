@@ -1,0 +1,58 @@
+// //mateapp shortcut creates starter code 
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:firebase_analytics/firebase_analytics.dart';
+// import 'package:firebase_analytics/observer.dart';
+// import 'package:provider/provider.dart';
+
+// import 'screens/screens.dart';
+// import 'services/services.dart';
+
+// void main() => runApp(MyApp());
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MultiProvider(//Allows us to provide data around the app
+            
+//       providers: [
+//         StreamProvider<FirebaseUser>.value(//Sharing the auth data around the application
+//           value: AuthService().user
+//           ),
+//         StreamProvider<dynamic>.value(
+//           value: Global.reportRef.documentStream,
+//           )
+//       ],
+
+//       child: MaterialApp(
+
+//         navigatorObservers: [ //Allows us to keep track of pages visited
+//           FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
+//         ],
+
+//         routes: {
+//           '/': (context) => LoginScreen(),
+//           '/topics': (context) => TopicsScreen(),
+//           '/profile': (context) => ProfileScreen(),
+//           '/about': (context) => AboutScreen()
+//         },
+
+//         //Theme
+//         theme: ThemeData(
+//           brightness: Brightness.dark,
+//           fontFamily: 'Nunito',
+//           bottomAppBarTheme: BottomAppBarTheme(
+//             color: Colors.black87
+//           ),
+//           textTheme: TextTheme(
+//             bodyText1: TextStyle(fontSize: 18),
+//             bodyText2: TextStyle(fontSize: 16),
+//             button: TextStyle(letterSpacing: 1.5, fontWeight: FontWeight.bold),
+//             headline1: TextStyle(fontWeight: FontWeight.bold),
+//             subtitle1: TextStyle(color: Colors.grey) 
+//             )
+//         ),
+//       ),
+//     );
+//   }
+// }
